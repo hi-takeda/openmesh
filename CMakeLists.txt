@@ -6,6 +6,16 @@ find_package(catkin REQUIRED COMPONENTS mk)
 
 set(VERSION 6.3)
 
+# To avoid catkin_package() error: "directory not exist"
+make_directory(${CATKIN_DEVEL_PREFIX}/include/openmesh)
+
+catkin_package(
+  DEPENDS
+  CATKIN_DEPENDS
+  INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include/openmesh
+  LIBRARIES OpenMeshCore OpenMeshTools
+)
+
 add_custom_target(
   build_openmesh ALL
   COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/tmp
@@ -15,13 +25,6 @@ add_custom_target(
   COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/tmp/include/OpenMesh ${CATKIN_DEVEL_PREFIX}/include/openmesh
   # copy lib files
   COMMAND cp -a ${CMAKE_CURRENT_BINARY_DIR}/tmp/lib/*.so* ${CATKIN_DEVEL_PREFIX}/lib/
-)
-
-catkin_package(
-  DEPENDS
-  CATKIN_DEPENDS
-  INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include/openmesh
-  LIBRARIES OpenMeshCore OpenMeshTools
 )
 
 install(
